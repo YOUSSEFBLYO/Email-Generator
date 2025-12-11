@@ -14,9 +14,13 @@ import lombok.AllArgsConstructor;
 public class EmailGeneratorController {
     private final EmailService emailService;
     @PostMapping("/generate")
-    public ResponseEntity<String> generateEmail(@RequestBody EmailRequest EmailRequest){
-        String emailReply=emailService.generateEmailReply(EmailRequest);
-        return ResponseEntity.ok(emailReply);
-
+    public ResponseEntity<String> generateEmail(@RequestBody EmailRequest emailRequest){
+        try {
+            String emailReply = emailService.generateEmailReply(emailRequest);
+            return ResponseEntity.ok(emailReply);
+        } catch (Exception e) {
+            String msg = "Error generating email: " + e.getMessage();
+            return ResponseEntity.status(500).body(msg);
+        }
     }
 }
